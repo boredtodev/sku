@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html ng-app="SKU">
+	<head lang="en">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+
+		<style type="text/css" media="screen">
+			td { padding: 5px; padding-right:20px; }
+			th, strong, h1 {font-weight: bold;}
+			* {font: 16px  Fixed, monospace;}
+		</style>
+
+		<script>
+		
+		// App
+		var app = angular.module('SKU', []); 
+	
+		app.config(function($routeProvider) {
+			$routeProvider.when('/index/', {templateUrl: 'home'});
+		});
+		
+		app.controller('SKUCtrl', function($scope, $route, $http) {
+			var url = 'http://127.0.0.1:8000/get/sku/';
+			//CORS
+			delete $http.defaults.headers.common['X-Requested-With'];
+			$http.get(url).then(function(json) {
+				$scope.skus = [ ];
+				for(i in json.data){
+					$scope.skus.push(json.data[i].fields)
+				}
+			});
+
+			$scope.total = 0;
+			$scope.show_details = false;
+
+
+			$scope.compute_price = function(s) {
+				if(! s.fixed_price){
+					s.price = s.rate * s.hours * Math.sqrt(s.units) * (1 + s.margin);
+				} else {
+					s.price = s.fixed_price * s.units;
+				}
+
+				$scope.revenue = 0
+				$scope.margin = 0
+				for(i in $scope.skus) {
+					var sku =  $scope.skus[i];
+					$scope.revenue += sku.price;
+					$scope.margin += sku.price - (sku.price / (1 + sku.margin))
+				}
+			}
+
+			$scope.clear = function() {
+				$scope.revenue = 0;
+				$scope.margin = 0;
+				$scope.show_details = false;
+			}
+
+			$scope.sqrt = function(n) {
+				return Math.sqrt(n)
+			}
+
+		});
+
+		app.filter('cartfilter', function() {
+			return function(skus, incart) {
+					var result = [];
+					for(i in skus) {
+						if(skus[i].units > 0)
+							result.push(skus[i])
+					}
+    				return result;
+ 			 	}
+		});
+
+		</script>
+	</head>
+
+	<body ng-controller='SKUCtrl'>
+	<h1> SKU Demo </h1>
+	<hr>
+	<div>
+      Search: <input ng-model='query' style='width:400px'>
+ 	</div>
+	<br/>
+
+	<table>
+		<tr><th>SKU</th> <th>Service Brief</th> <th>Units</th> <th>Price</th><th>Recomended</th></tr>
+		<tr ng-repeat='sku in skus | filter:query '> <!--| orderBy:"price":true' >-->
+ 	     	<td>{{sku.sku}}</td>
+      		<td>{{sku.name}}</td>
+      		<td><input ng-model='sku.units' ng-change='compute_price(sku)'
+				placeholder='0' style='width:30px'></td>
+			<td style='text-align:right'>{{sku.price | currency}}</td>
+      		<td>{{sku.recomended.length}}</td>
+    	</tr>
+  	</table>
+
+	<br/>
+	<br/>
+	<div><strong>Total: {{revenue | currency}} </strong><div>
+	<br/>
+	
+	<button ng-click='clear()'>Clear</button>
+	<button ng-click='show_details = !show_details'>Details</button>
+	<hr>
+	<div ng-show='show_details'>
+	<table>
+		<tr><th>SKU</th> <th>Units</th> <th>Hours</th><th>Discount</th><th>Rate</th>
+		<th>Cost</th> <th>Revenue</th> <th>Margin</th></tr>
+		<tr ng-repeat='sku in skus | cartfilter:incart | orderBy:"price":true' >
+		 	<td>{{sku.sku}}</td>
+      		<td style='text-align:right'>{{sku.units}}</td>
+      		<td style='text-align:right'>{{ ((sku.price / (1+sku.margin)) / sku.rate).toFixed(1) }}</td>
+			<td style='text-align:right'>{{ ((1 - (1 / sqrt(sku.units)))*100).toFixed() }}%</td>
+      		<td style='text-align:right'>{{sku.rate | currency}}</td>
+      		<td style='text-align:right'>{{ (sku.price / (1+sku.margin)) | currency}}</td>
+      		<td style='text-align:right'>{{sku.price | currency}}</td>
+      		<td style='text-align:right'>{{sku.price - (sku.price / (1+sku.margin)) | currency}}
+      		({{(sku.margin * 100).toFixed()}}%)</td>
+		</tr>
+	</table>
+	<br/>
+	<br/>
+	<div><strong>Total Margin: {{margin | currency}} </strong><div>
+	<br/>
+	</div>
+
+	</body>
+</html>
+
