@@ -22,7 +22,7 @@
 		});
 		
 		app.controller('SKUCtrl', function($scope, $route, $http) {
-			var url = 'http://127.0.0.1:8000/get/sku/';
+			var url = 'http://stark-basin-7475.herokuapp.com/get/sku/';
 			//CORS
 			delete $http.defaults.headers.common['X-Requested-With'];
 			$http.get(url).then(function(json) {
