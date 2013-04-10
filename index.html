@@ -7,88 +7,110 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width,  maximum-scale=1">
-		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+		<!-- <link href="http://netdna.bootstrapcdn.com/twitter&#45;bootstrap/2.3.0/css/bootstrap&#45;combined.min.css" rel="stylesheet"> -->
+		<link rel="stylesheet/less" type="text/css" href="components/bootstrap/less/bootstrap.less">
+		<link rel="stylesheet/less" type="text/css" href="components/bootstrap/less/responsive.less">
 		<link rel="stylesheet/less" type="text/css" href="style.less">
 
 		<!-- Move off of CDN	 -->
-		<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.3/less.min.js"></script>
+		<script src="less-1.3.3.min.js"></script>
 
-	<title>Forsythe SKU services</title>
-</head>
+		<title>Forsythe SKU services</title>
+	</head>
 
-<body ng-controller='SKUCtrl'>
-	<div class="navbar navbar-inverse">
-		<div class="navbar-inner">
-			<div class="container">
+	<body ng-controller='SKUCtrl'>
+		<div class="navbar navbar-inverted">
+			<div class="navbar-inner">
+				<div class="container">
 
-				<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
+					<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
 
-				<!-- Be sure to leave the brand out there if you want it shown -->
-				<a class="brand" href="#">[LOGO]</a>
+					<!-- Be sure to leave the brand out there if you want it shown -->
+					<a class="brand" href="#">[LOGO]</a>
 
-				<!-- Everything you want hidden at 940px or less, place within here -->
-				<div class="nav-collapse collapse">
-					<!-- .nav, .navbar-search, .navbar-form, etc -->
-					<ul class="nav">
-						<li class="active"><a href="#"> <i class="icon-home icon-white"></i> Home</a></li>
-						<li><a href="#i"><i class="icon-shopping-cart icon-white"></i> Order</a></li>
-					</ul>
+					<!-- Everything you want hidden at 940px or less, place within here -->
+					<div class="nav-collapse collapse">
+						<!-- .nav, .navbar-search, .navbar-form, etc -->
+						<ul class="nav">
+							<li class="active"><a href="#"> <i class="icon-home icon-white"></i> Home</a></li>
+							<li><a href="#i"><i class="icon-shopping-cart icon-white"></i> Order</a></li>
+						</ul>
 
-					<ul class="nav pull-right">
-						<li class='small'>
+						<ul class="nav pull-right">
+							<li class='not-medium'>
 							<form class="navbar-form ">
 								<div class="input-prepend navbar-form">
 									<span class="add-on"><i class="icon-search"></i></span>
 									<input ng-model="filter" id="filter" type="text" placeholder="Keyword Search">
 								</div>
 							</form>
-						</li>
+							</li>
+						</ul>
 
-					</ul>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div id='content' class='row-fluid'>
-		<div class='span9 main'>
-			<h3>Forsythe SKUs</h3>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th class='small'>SKU</th>
-						<th>Service Brief</th>
-						<th>Order</th>
-					</tr>
-				</thead>
+		<div id='content' class='row-fluid'>
+			<div class='span9 main'>
+				<h3 class='not-small not-medium'>Forsythe SKUs</h3>
 
-				<tbody>
-					<tr ng-repeat='sku in skus | filter:filter '>
-						<td class='small'>{{sku.sku}}</td>
-						<td><a href="/add/{{sku.sku}}">{{sku.name}}</a></td>
-						<td><i class="icon-ok"></i></td>
-					</tr>
-				</tbody>
-			</table>
+				<form class="medium not-small navbar-form">
+					<h3>Forsythe SKUs &nbsp;	
+						<div class="input-prepend navbar-form">
+							<span class="add-on"><i class="icon-search"></i></span>
+							<input ng-model="filter" id="filter" type="text" placeholder="Keyword Search">
+						</div>
+					</h3>
+				</form>
+
+
+				<form class="small navbar-form">
+					<h3>SKUs &nbsp;	
+						<div class="input-prepend navbar-form">
+							<span class="add-on"><i class="icon-search"></i></span>
+							<input ng-model="filter" id="filter" type="text" placeholder="Keyword Search">
+						</div>
+					</h3>
+				</form>
+
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th class='not-small'>SKU</th>
+							<th>Service Brief</th>
+							<th>Order</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr ng-repeat='sku in skus | filter:filter '>
+							<td class='not-small'>{{sku.sku}}</td>
+							<td><a href="/add/{{sku.sku}}">{{sku.name}}</a></td>
+							<td><i class="icon-ok"></i></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class='span3 sidebar'>
+				<h3>Support</h3>
+				<ul class="nav nav-tabs nav-stacked">
+					<li><a href='#'>Fort</a></li>
+					<li><a href='#'>Salesforce</a></li>
+					<li><a href='#'>Oracle</a></li>
+				</ul>
+			</div>
 		</div>
-		<div class='span3 sidebar'>
-			<h3>Support</h3>
-			<ul class="nav nav-tabs nav-stacked">
-				<li><a href='#'>Fort</a></li>
-				<li><a href='#'>Salesforce</a></li>
-				<li><a href='#'>Oracle</a></li>
-			</ul>
-		</div>
-	</div>
 
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
-	<script src="app.js"></script>
-</body>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+		<script src="app.js"></script>
+	</body>
 </html>
